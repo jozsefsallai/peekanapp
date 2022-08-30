@@ -1,0 +1,72 @@
+# Peek-An-App API
+
+**Peek-An-App** is a free-to-use API that you can use to fetch information about
+a given application on Google Play Store and the Apple App Store.
+
+## Google Play Store
+
+Get information about a Google Play Store application. The `appId` needs to be
+the string identifier of the application, for example: `app.somus.social`.
+
+```
+GET /api/playstore?appId=<appId>
+```
+
+## Apple App Store
+
+Get information about an Apple App Store application. The `appId` needs to be
+the string identifier of the application, for example: `app.somus.social`.
+
+```
+GET /api/appstore?appId=<appId>
+```
+
+## Both
+
+Get information for two applications on both stores. The `androidAppId` and
+`iOSAppId` need to be the string identifier of the applications and they can be
+different.
+
+```
+GET /api/all?androidAppId=<androidAppId>&iOSAppId=<iOSAppId>
+```
+
+The response looks like this:
+
+```json
+{
+  "playstore": { ... },
+  "appstore": { ... },
+  "errors": []
+}
+```
+
+If either `androidAppId` or `iOSAppId` is omitted, the respective fields in the
+response will be `null`.
+
+## Errors
+
+### `AppNotFoundPlayStore` (404)
+
+The app with the specified identifier was not found on the Google Play Store.
+
+### `AppNotFoundAppStore` (404)
+
+The app with the specified identifier was not found on the Apple App Store.
+
+### `ParseErrorPlayStore` (500)
+
+The response from the Google Play Store was not in the expected format.
+
+### `ParseErrorAppStore` (500)
+
+The response from the Apple App Store was not in the expected format.
+
+### `UnknownError` (500)
+
+An unexpected error occurred.
+
+## License
+
+MIT. This project was built by [@jozsefsallai](https://github.com/jozsefsallai)
+with the amazing libraries provided by [@facundoolano](https://github.com/facundoolano).
