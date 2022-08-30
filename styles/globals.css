@@ -51,3 +51,20 @@ pre code {
   padding: 0;
   border-radius: 0;
 }
+
+label {
+  font-weight: 600;
+  display: block;
+}
+
+select,
+input {
+  display: block;
+  padding: 15px 25px;
+  width: 100%;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+}
