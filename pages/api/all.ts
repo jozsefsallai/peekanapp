@@ -7,6 +7,5 @@ export default async function all(req: NextApiRequest, res: NextApiResponse) {
   const iOSAppId = req.query.iOSAppId as string | undefined;
 
   const response = await scrape.all(androidAppId, iOSAppId);
-  const status = !!response.errors?.length ? 500 : 200;
-  return res.status(status).json(response);
+  return res.json(response);
 }
