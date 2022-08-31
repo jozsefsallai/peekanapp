@@ -4,6 +4,7 @@ enum Mode {
   PlayStore = 'Google Play Store',
   AppStore = 'Apple App Store',
   Both = 'Both',
+  Version = 'Version',
 }
 
 function generateURL(
@@ -27,11 +28,29 @@ function generateURL(
     return url.href;
   }
 
-  if (mode === Mode.Both && androidAppId.length > 0 && iOSAppId.length > 0) {
-    const url = new URL(`${window.location.href}api/all`);
-    url.searchParams.set('androidAppId', androidAppId);
-    url.searchParams.set('iOSAppId', iOSAppId);
-    return url.href;
+  if (
+    (mode === Mode.Both || mode === Mode.Version) &&
+    (androidAppId.length > 0 || iOSAppId.length > 0)
+  ) {
+    let url: URL;
+
+    if (mode === Mode.Both) {
+      url = new URL(`${window.location.href}api/all`);
+    }
+
+    if (mode === Mode.Version) {
+      url = new URL(`${window.location.href}api/version`);
+    }
+
+    if (androidAppId.length > 0) {
+      url!.searchParams.set('androidAppId', androidAppId);
+    }
+
+    if (iOSAppId.length > 0) {
+      url!.searchParams.set('iOSAppId', iOSAppId);
+    }
+
+    return url!.href;
   }
 
   return '';
@@ -64,7 +83,9 @@ export default function URLGenerator() {
         ))}
       </select>
 
-      {(mode === Mode.PlayStore || mode === Mode.Both) && (
+      {(mode === Mode.PlayStore ||
+        mode === Mode.Both ||
+        mode === Mode.Version) && (
         <>
           <label htmlFor="androidAppId">Android App ID:</label>
 
@@ -78,7 +99,9 @@ export default function URLGenerator() {
         </>
       )}
 
-      {(mode === Mode.AppStore || mode === Mode.Both) && (
+      {(mode === Mode.AppStore ||
+        mode === Mode.Both ||
+        mode === Mode.Version) && (
         <>
           <label htmlFor="iOSAppId">iOS App ID:</label>
 

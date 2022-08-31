@@ -13,6 +13,12 @@ export interface AppDetails {
   errors?: ErrorResponse[];
 }
 
+export interface AppVersion {
+  playstore: string | null;
+  appstore: string | null;
+  errors?: ErrorResponse[];
+}
+
 export async function playstore(appId: string): Promise<IAppItemFullDetail> {
   try {
     const playStoreDetails = await googleplay.app({ appId });
@@ -70,6 +76,57 @@ export async function all(
   if (typeof iOSAppId !== 'undefined') {
     try {
       response.appstore = await appstore(iOSAppId);
+    } catch (err) {
+      if (err instanceof ScrapeError) {
+        response.errors!.push({
+          error: err.code,
+          statusCode: err.status,
+        });
+      } else {
+        response.errors!.push({
+          error: ScrapeErrors.UnknownError,
+          statusCode: 500,
+        });
+      }
+    }
+  }
+
+  return response;
+}
+
+export async function version(
+  androidAppId?: string,
+  iOSAppId?: string,
+): Promise<AppVersion> {
+  const response: AppVersion = {
+    playstore: null,
+    appstore: null,
+    errors: [],
+  };
+
+  if (typeof androidAppId !== 'undefined') {
+    try {
+      const res = await playstore(androidAppId);
+      response.playstore = res.version;
+    } catch (err) {
+      if (err instanceof ScrapeError) {
+        response.errors!.push({
+          error: err.code,
+          statusCode: err.status,
+        });
+      } else {
+        response.errors!.push({
+          error: ScrapeErrors.UnknownError,
+          statusCode: 500,
+        });
+      }
+    }
+  }
+
+  if (typeof iOSAppId !== 'undefined') {
+    try {
+      const res = await appstore(iOSAppId);
+      response.appstore = res.version;
     } catch (err) {
       if (err instanceof ScrapeError) {
         response.errors!.push({

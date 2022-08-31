@@ -46,6 +46,29 @@ The response looks like this:
 If either `androidAppId` or `iOSAppId` is omitted, the respective fields in the
 response will be `null`.
 
+## Version
+
+Get the latest version string for two applications on both stores. The
+`androidAppId` and `iOSAppId` need to be the string identifier of the
+applications and they can be different and either of them can be missing.
+
+```
+GET /api/version?androidAppId=<androidAppId>&iOSAppId=<iOSAppId>
+```
+
+The response looks like this:
+
+```json
+{
+  "playstore": "1.0.0",
+  "appstore": "1.0.0",
+  "errors": []
+}
+```
+
+If either `androidAppId` or `iOSAppId` is omitted, the respective fields in the
+response will be `null`.
+
 ## URL Generator
 
 <URLGenerator />
