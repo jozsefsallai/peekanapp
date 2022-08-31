@@ -16,6 +16,10 @@ export interface AppDetails {
 export interface AppVersion {
   playstore: string | null;
   appstore: string | null;
+  meta: {
+    playstoreUrl: string | null;
+    appstoreUrl: string | null;
+  };
   errors?: ErrorResponse[];
 }
 
@@ -101,6 +105,10 @@ export async function version(
   const response: AppVersion = {
     playstore: null,
     appstore: null,
+    meta: {
+      playstoreUrl: null,
+      appstoreUrl: null,
+    },
     errors: [],
   };
 
@@ -108,6 +116,7 @@ export async function version(
     try {
       const res = await playstore(androidAppId);
       response.playstore = res.version;
+      response.meta.playstoreUrl = res.url;
     } catch (err) {
       if (err instanceof ScrapeError) {
         response.errors!.push({
@@ -127,6 +136,7 @@ export async function version(
     try {
       const res = await appstore(iOSAppId);
       response.appstore = res.version;
+      response.meta.appstoreUrl = res.url;
     } catch (err) {
       if (err instanceof ScrapeError) {
         response.errors!.push({
